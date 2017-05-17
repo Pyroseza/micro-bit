@@ -1,68 +1,72 @@
-from microbit import *
-from collections import *
+import microbit as mb
+import collections as collects
     
-steps = 0
-shakes_since_last_check = 0
-calories_allowance_idle = 1500
-calories_burnt = 0
-calories_consumed = 0
-calories_allowed = 0
-all_meals = []
-stay_in_menu = True
+class Stepper():
+    steps = 0
+    shakes_since_last_check = 0
+    calories_allowance_idle = 1500
+    calories_burnt = 0
+    calories_consumed = 0
+    calories_allowed = 0
+    all_meals = []
+    stay_in_menu = True
 
-all_meals.append({'name': 'Burger', 'calories': 580})
-all_meals.append({'name': 'Slice of Pizza', 'calories': 70})
-all_meals.append({'name': 'Apple', 'calories': 30})
-all_meals.append({'name': 'Chicken Salad', 'calories': 170})
-all_meals.append({'name': 'Banana', 'calories': 50})
-all_meals.append({'name': 'Chocolate', 'calories': 800})
-all_meals.append({'name': 'Health wrap', 'calories': 130})
+    def __init__(self):
+        self.all_meals.append({'name': 'Burger', 'calories': 580})
+        self.all_meals.append({'name': 'Slice of Pizza', 'calories': 70})
+        self.all_meals.append({'name': 'Apple', 'calories': 30})
+        self.all_meals.append({'name': 'Chicken Salad', 'calories': 170})
+        self.all_meals.append({'name': 'Banana', 'calories': 50})
+        self.all_meals.append({'name': 'Chocolate', 'calories': 800})
+        self.all_meals.append({'name': 'Health wrap', 'calories': 130})
+        return
 
-def updateValues():
-    global steps, shakes_since_last_check
-    global calories_allowed, calories_allowance_idle, calories_burnt
-    calories_burnt = steps * 150
-    calories_allowed = calories_allowance_idle + calories_burnt
 
-def main():
-    global steps, shakes_since_last_check
-    global calories_allowed, calories_allowance_idle
-    global calories_burnt, calories_consumed
-    global all_meals
-    global stay_in_menu
-    while True:
-        if accelerometer.is_gesture('shake'):
-            steps += 10         
-        if button_a.is_pressed():
-            updateValues()
-            display.scroll('Steps: ' + str(steps))
-            display.scroll('Calories: ' + str(calories_consumed) + '/' + str(calories_allowed))
-        elif button_b.is_pressed():
-            updateValues()
-            allowed_meals = []
-            for meal in all_meals:
-                if (meal['calories'] <= (calories_allowed - calories_consumed)):
-                    allowed_meals.append(meal)
-            for index, meal in enumerate(allowed_meals):
-                if (stay_in_menu == True):
-                    while True:
-                        display.scroll(str(index+1) + '. ' + meal['name'])
-                        display.scroll('A: next, B: exit, A+B: eat')
-                        if button_a.is_pressed() and button_b.is_pressed():
-                            calories_consumed += meal['calories']
-                            display.scroll('Yum!')
-                            stay_in_menu = False
-                            break
-                        elif button_a.is_pressed():
-                            break
-                        elif button_b.is_pressed():
-                            stay_in_menu = False
-                            break
-                        sleep(10)
-                else:
-                    stay_in_menu = True
-                    break
-        sleep(100)
+    def updateValues(self):
+        self.calories_burnt = self.steps * 150
+        self.calories_allowed = self.calories_allowance_idle + self.calories_burnt
+
+    def checkAllowedMeals(self):
+        self.allowed_meals = []
+        for meal in self.all_meals:
+            if (meal['calories'] <= (self.calories_allowed - self.calories_consumed)):
+                self.allowed_meals.append(meal)
+
+    def nom(self):
+        while True:
+            mb.display.scroll(str(index+1) + '. ' + meal['name'])
+            mb.display.scroll('A: next, B: exit, A+B: eat')
+            if mb.button_a.is_pressed() and mb.button_b.is_pressed():
+                self.calories_consumed += meal['calories']
+                mb.display.scroll('Yum!')
+                self.stay_in_menu = False
+                break
+            elif mb.button_a.is_pressed():
+                break
+            elif mb.button_b.is_pressed():
+                self.stay_in_menu = False
+                break
+            sleep(10)
+
+    def main(self):
+        while True:
+            if mb.accelerometer.is_gesture('shake'):
+                self.steps += 10         
+            if mb.button_a.is_pressed():
+                self.updateValues()
+                mb.display.scroll('Steps: ' + str(self.steps))
+                mb.display.scroll('Calories: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
+            elif mb.button_b.is_pressed():
+                self.updateValues()
+                self.checkAllowedMeals()
+                for index, meal in enumerate(self.allowed_meals):
+                    if (self.stay_in_menu == True):
+                        self.nom()
+                    else:
+                        self.stay_in_menu = True
+                        break
+            sleep(100)
         
 if __name__=='__main__':
-    main()
+    app = Stepper()
+    app.main()
