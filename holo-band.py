@@ -21,12 +21,6 @@ all_meals.append({'name': 'Health wrap', 'calories': 130})
 def updateValues():
     global steps, shakes_since_last_check
     global calories_allowed, calories_allowance_idle, calories_burnt
-    #for gesture in accelerometer.get_gestures():
-    #    if gesture == 'shake':
-    #        shakes_since_last_check += 1
-    #display.scroll(str(shakes))
-    #steps += shakes_since_last_check
-    #shakes_since_last_check = 0
     calories_burnt = steps * 150
     calories_allowed = calories_allowance_idle + calories_burnt
 
@@ -56,6 +50,7 @@ def main():
                         display.scroll('A: next, B: exit, A+B: eat')
                         if button_a.is_pressed() and button_b.is_pressed():
                             calories_consumed += meal['calories']
+                            display.scroll('Yum!')
                             stay_in_menu = False
                             break
                         elif button_a.is_pressed():
