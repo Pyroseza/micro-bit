@@ -41,7 +41,8 @@ def main():
             steps += 10         
         if button_a.is_pressed():
             updateValues()
-            display.scroll(str(calories_consumed) + '/' + str(calories_allowed))
+            display.scroll('Steps: ' + str(steps))
+            display.scroll('Calories: ' + str(calories_consumed) + '/' + str(calories_allowed))
         elif button_b.is_pressed():
             updateValues()
             allowed_meals = []
@@ -52,7 +53,7 @@ def main():
                 if (stay_in_menu == True):
                     while True:
                         display.scroll(str(index+1) + '. ' + meal['name'])
-                        display.scroll('A: next, B: exit, A+B: consume')
+                        display.scroll('A: next, B: exit, A+B: eat')
                         if button_a.is_pressed() and button_b.is_pressed():
                             calories_consumed += meal['calories']
                             stay_in_menu = False
