@@ -45,7 +45,7 @@ class Stepper():
     def nom(self, index, meal):
         while True:
             mb.display.scroll(str(index+1) + '. ' + meal['name'])
-            mb.display.scroll('A: next, B: exit, A+B: eat')
+            #mb.display.scroll('A: next, B: exit, A+B: eat')
             if mb.button_a.is_pressed() and mb.button_b.is_pressed():
                 #eat the food!
                 self.calories_consumed += meal['calories']
@@ -101,7 +101,7 @@ class Stepper():
                 self.updateValues()
                 mb.display.scroll('Steps: ' + str(self.steps))
                 mb.display.scroll('Calories: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
-            elif mb.button_b.is_pressed():            
+            elif mb.button_a.is_pressed() and mb.button_b.is_pressed():            
                 #check what meals are allowed
                 self.checkAllowedMeals()
                 for index, meal in enumerate(self.allowed_meals):
@@ -109,9 +109,10 @@ class Stepper():
                         #show mini menu for single meal
                         self.nom(index, meal)
                     else:
-                        #jump out entirely
                         self.stay_in_menu = True
+                        #jump out entirely               
                         break
+                
             mb.sleep(100)
         
 if __name__=='__main__':
