@@ -50,8 +50,8 @@ class Stepper():
 
     def main(self):
         while True:
-            if mb.accelerometer.is_gesture('shake'):
-                self.steps += 10         
+            if mb.accelerometer.was_gesture('shake'):
+                self.steps += 1         
             if mb.button_a.is_pressed():
                 self.updateValues()
                 mb.display.scroll('Steps: ' + str(self.steps))
