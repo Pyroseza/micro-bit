@@ -46,7 +46,7 @@ class Stepper():
             elif mb.button_b.is_pressed():
                 self.stay_in_menu = False
                 break
-            sleep(10)
+            mb.sleep(10)
 
     def main(self):
         while True:
@@ -65,7 +65,7 @@ class Stepper():
                     else:
                         self.stay_in_menu = True
                         break
-            sleep(100)
+            mb.sleep(100)
         
 if __name__=='__main__':
     app = Stepper()
