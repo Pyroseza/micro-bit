@@ -1,7 +1,6 @@
 import microbit as mb
-#import collections as collects
-import music as ms
-    
+import music
+
 class Stepper():
     #steps = 0
     #make steps 4999 for testing
@@ -65,7 +64,7 @@ class Stepper():
     def checkGoals(self):
         #check for big victory every 5000 steps
         if (self.steps % 5000 == 0):
-            ms.play(ms.PYTHON,wait=False)
+            music.play(music.PYTHON,wait=False)
             mb.display.show(mb.Image.HAPPY)
             mb.sleep(500)
             mb.display.show(mb.Image.TARGET)
@@ -82,7 +81,7 @@ class Stepper():
         elif (self.steps % 1000 == 0):
             #small victory for every 1000 steps
             mb.display.scroll(str(self.steps) + ' steps!')
-            ms.play(ms.ENTERTAINER,wait=False)
+            music.play(music.ENTERTAINER,wait=False)
             mb.display.show(mb.Image.HAPPY)
             mb.sleep(500)
             mb.display.show(mb.Image.TARGET)
