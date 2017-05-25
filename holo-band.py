@@ -14,13 +14,13 @@ class Stepper():
     stay_in_menu = True
 
     def __init__(self):
-        self.all_meals.append({'name': 'Burger', 'calories': 580})
-        self.all_meals.append({'name': 'Slice of Pizza', 'calories': 70})
         self.all_meals.append({'name': 'Apple', 'calories': 30})
-        self.all_meals.append({'name': 'Chicken Salad', 'calories': 170})
         self.all_meals.append({'name': 'Banana', 'calories': 50})
-        self.all_meals.append({'name': 'Chocolate', 'calories': 800})
+        self.all_meals.append({'name': 'Slice of Pizza', 'calories': 70})
         self.all_meals.append({'name': 'Health wrap', 'calories': 130})
+        self.all_meals.append({'name': 'Chicken Salad', 'calories': 170})
+        self.all_meals.append({'name': 'Burger', 'calories': 580})
+        self.all_meals.append({'name': 'Chocolate', 'calories': 800})
         return
 
     def updateValues(self):
@@ -95,7 +95,8 @@ class Stepper():
             if mb.accelerometer.was_gesture('shake'):
                 self.steps += 1
                 self.checkGoals()
-             if mb.button_a.is_pressed() and mb.button_b.is_pressed():            
+                
+            if mb.button_a.is_pressed() and mb.button_b.is_pressed():            
                 #check what meals are allowed
                 self.checkAllowedMeals()
                 for index, meal in enumerate(self.allowed_meals):
@@ -111,6 +112,7 @@ class Stepper():
                 self.updateValues()
                 mb.display.scroll('Steps: ' + str(self.steps))
                 mb.display.scroll('Calories: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
+                
             mb.sleep(100)
         
 if __name__=='__main__':
