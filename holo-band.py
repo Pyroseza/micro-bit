@@ -95,12 +95,7 @@ class Stepper():
             if mb.accelerometer.was_gesture('shake'):
                 self.steps += 1
                 self.checkGoals()
-            if mb.button_a.is_pressed():
-                #update values used in the calculations
-                self.updateValues()
-                mb.display.scroll('Steps: ' + str(self.steps))
-                mb.display.scroll('Calories: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
-            elif mb.button_a.is_pressed() and mb.button_b.is_pressed():            
+             if mb.button_a.is_pressed() and mb.button_b.is_pressed():            
                 #check what meals are allowed
                 self.checkAllowedMeals()
                 for index, meal in enumerate(self.allowed_meals):
@@ -111,7 +106,11 @@ class Stepper():
                         self.stay_in_menu = True
                         #jump out entirely               
                         break
-                
+            elif mb.button_a.is_pressed():
+                #update values used in the calculations
+                self.updateValues()
+                mb.display.scroll('Steps: ' + str(self.steps))
+                mb.display.scroll('Calories: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
             mb.sleep(100)
         
 if __name__=='__main__':
