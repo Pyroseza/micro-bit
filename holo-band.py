@@ -14,13 +14,13 @@ class Stepper():
     stay_in_menu = True
 
     def __init__(self):
-        self.all_meals.append({'name': 'Apple', 'calories': 30})
-        self.all_meals.append({'name': 'Banana', 'calories': 50})
-        self.all_meals.append({'name': 'Slice of Pizza', 'calories': 70})
-        self.all_meals.append({'name': 'Health wrap', 'calories': 130})
-        self.all_meals.append({'name': 'Chicken Salad', 'calories': 170})
-        self.all_meals.append({'name': 'Burger', 'calories': 580})
-        self.all_meals.append({'name': 'Chocolate', 'calories': 800})
+        self.all_meals.append({'name': 'Apple', 'KCal': 30})
+        self.all_meals.append({'name': 'Banana', 'KCal': 50})
+        self.all_meals.append({'name': 'Slice of Pizza', 'KCal': 70})
+        self.all_meals.append({'name': 'Health wrap', 'KCal': 130})
+        self.all_meals.append({'name': 'Chicken Salad', 'KCal': 170})
+        self.all_meals.append({'name': 'Burger', 'KCal': 580})
+        self.all_meals.append({'name': 'Chocolate', 'KCal': 800})
         return
 
     def updateValues(self):
@@ -47,7 +47,7 @@ class Stepper():
             #mb.display.scroll('A: next, B: exit, A+B: eat')
             if mb.button_a.is_pressed() and mb.button_b.is_pressed():
                 #eat the food!
-                self.calories_consumed += meal['calories']
+                self.calories_consumed += meal['KCal']
                 mb.display.scroll('Yum!')
                 mb.display.show(mb.Image.PACMAN)
                 mb.sleep(500)
@@ -111,7 +111,7 @@ class Stepper():
                 #update values used in the calculations
                 self.updateValues()
                 mb.display.scroll('Steps: ' + str(self.steps))
-                mb.display.scroll('Calories: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
+                mb.display.scroll('KCal: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
                 
             mb.sleep(100)
         
