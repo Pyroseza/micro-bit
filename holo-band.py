@@ -22,6 +22,7 @@ class Stepper():
     secondsText = ''
     minutesText = ''
     hoursText = ''
+    showAnimMain = True
 
     def __init__(self):
         self.all_meals.append({'name': 'Apple', 'KCal': 30})
@@ -39,6 +40,7 @@ class Stepper():
         self.calories_burnt = int(self.steps * (1 / 20))
         #calculate how many calories are allowed now
         self.calories_allowed = self.calories_allowance_idle + self.calories_burnt
+        return
 
     def checkAllowedMeals(self):
         #update values used in the calculations
@@ -50,6 +52,7 @@ class Stepper():
             #check what can be consumed does not go over the calory limit
             if (meal['KCal'] <= (self.calories_allowed - self.calories_consumed)):
                 self.allowed_meals.append(meal)
+        return
 
     def nom(self, index, meal):
         while True:
@@ -70,65 +73,55 @@ class Stepper():
                 self.stay_in_menu = False
                 break
             self.snooze(self.sleepInterval)
+        return
+        
+    def animMain(self, animLength):
+        dotImage = mb.Image("00000:"
+                            "00000:"
+                            "00900:"
+                            "00000:"
+                            "00000")
+        animLength = min(5, max(animLength, 1))
+        mb.display.show(mb.Image.HAPPY)
+        self.snooze(self.sleepInterval * 5)
+        mb.display.show(mb.Image.HEART)
+        self.snooze(self.sleepInterval * 5)
+        for i in range(1,animLength):
+            mb.display.show(mb.Image.DIAMOND)
+            self.snooze(self.sleepInterval)
+            mb.display.show(mb.Image.SQUARE)
+            self.snooze(self.sleepInterval)
+            mb.display.show(mb.Image.DIAMOND_SMALL)
+            self.snooze(self.sleepInterval)
+            mb.display.show(mb.Image.SQUARE_SMALL)
+            self.snooze(self.sleepInterval)
+            mb.display.show(dotImage)
+            self.snooze(self.sleepInterval)
+        mb.display.clear()
+        return
     
+    def animGoal(self, animLength):
+        animLength = min(20, max(animLength, 1))
+        for i in range(1,animLength):
+            mb.display.show(mb.Image.HAPPY)
+            self.snooze(self.sleepInterval * 5)
+            mb.display.show(mb.Image.TARGET)
+            self.snooze(self.sleepInterval * 5)
+            mb.display.show(mb.Image.YES)
+            self.snooze(self.sleepInterval * 5)
+        mb.display.clear()
+        return
+        
     def checkGoals(self):
         #check for big victory every 5000 steps
         if (self.steps % 5000 == 0):
             music.play(music.PYTHON,wait=False)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.clear()
+            self.animGoal(9)
         elif (self.steps % 1000 == 0):
             #small victory for every 1000 steps
             mb.display.scroll(str(self.steps) + ' steps!')
             music.play(music.ENTERTAINER,wait=False)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)    
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.HAPPY)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.TARGET)
-            self.snooze(self.sleepInterval * 5)
-            mb.display.show(mb.Image.YES)    
-            self.snooze(self.sleepInterval * 5)
-            mb.display.clear()
+            self.animGoal(9)
 
     def increaseTimeElapsed(self, tick):
         self.milliseconds += tick
@@ -139,6 +132,11 @@ class Stepper():
 
     def main(self):
         while True:
+            
+            if (self.showAnimMain == True):
+                self.animMain(10)
+                self.showAnimMain = False
+                
             if mb.accelerometer.was_gesture('shake'):
                 self.steps += 1
                 self.checkGoals()
@@ -154,12 +152,16 @@ class Stepper():
                         self.stay_in_menu = True
                         #jump out entirely
                         break
-            elif mb.button_a.was_pressed():
+                self.showAnimMain = True
+
+            if mb.button_a.is_pressed():
                 #update values used in the calculations
-                self.updateValues()
+                #self.updateValues()
                 mb.display.scroll('KCal: ' + str(self.calories_consumed) + '/' + str(self.calories_allowed))
                 mb.display.scroll('Steps: ' + str(self.steps))
-            elif mb.button_b.was_pressed():
+                self.showAnimMain = True
+
+            if mb.button_b.is_pressed():
                 #show a clock face for 50ms and then the "time"
                 mb.display.show(mb.Image.ALL_CLOCKS,(self.sleepInterval//2),wait=True, loop=False, clear=True)
                 self.increaseTimeElapsed(self.sleepInterval//2)
@@ -171,6 +173,7 @@ class Stepper():
                 self.seconds = (self.seconds - (self.hours * 3600) - (self.minutes * 60))
                 self.secondsText = ('0' if self.seconds < 10 else '') + str(self.seconds)
                 mb.display.scroll(self.hoursText + ':' + self.minutesText + ':' + self.secondsText)
+                self.showAnimMain = True
             self.snooze(self.sleepInterval)
         
 if __name__=='__main__':
